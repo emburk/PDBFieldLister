@@ -141,8 +141,6 @@ void GetStructFields(IDiaSymbol* pSymbol, std::wstring prefix, const LONG startO
             field_name = std::wstring(name);
         }
         pChild->get_offset(&offset);
-        // add start offset:
-        offset += startOffset;
         pChild->get_type(&pType);
         DWORD typeTag = 0;
         pType->get_symTag(&typeTag);
@@ -167,12 +165,14 @@ void GetStructFields(IDiaSymbol* pSymbol, std::wstring prefix, const LONG startO
         if (typeTag == SymTagBaseType || typeTag == SymTagEnum) {
             DWORD baseType = 0;
             if (SUCCEEDED(pType->get_baseType(&baseType))) {
+                // add start offset and uppdate:
+                offset += startOffset;
                 printStructFields(field_name, offset, totalByteSize, size, GetBaseTypeName(baseType, totalByteSize / size[0] / size[1]));
             }
         }
         // subfield is union or struct, recurse
         else if (typeTag == SymTagUDT) {
-            printStructFields(field_name, offset, totalByteSize, size, L"struct");
+            printStructFields(field_name, offset + startOffset, totalByteSize, size, L"struct");
             GetStructFields(pType, field_name, offset + startOffset);
         }
         else {
