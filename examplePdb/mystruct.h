@@ -1,11 +1,17 @@
 #include <stdint.h>
 
+typedef enum {
+    A1 = 0,
+    B2 = 1
+} var_enum2_T;
 
 typedef  struct SubStruct {
     double    var_double;
     float     var_float;
     int32_t   var_int32;
     uint32_t  var_uint32;
+    enum {A,B,C} var_enum1;
+    var_enum2_T var_enum2;
 } SubStruct;
 
 typedef struct MainStruct {

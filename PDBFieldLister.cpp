@@ -164,7 +164,7 @@ void GetStructFields(IDiaSymbol* pSymbol, std::wstring prefix, const LONG startO
             pType->get_symTag(&typeTag);
             counter++;
         }
-        if (typeTag == SymTagBaseType) {
+        if (typeTag == SymTagBaseType || typeTag == SymTagEnum) {
             DWORD baseType = 0;
             if (SUCCEEDED(pType->get_baseType(&baseType))) {
                 printStructFields(field_name, offset, totalByteSize, size, GetBaseTypeName(baseType, totalByteSize / size[0] / size[1]));
